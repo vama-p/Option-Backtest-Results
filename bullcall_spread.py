@@ -27,7 +27,7 @@ def cash_flow (entry_long, entry_short, exit_long, exit_short):
     
     net_debit = (entry_long - entry_short) * lot_size
     
-    spread_value = (exit_long - entry_long) * lot_size
+    spread_value = (exit_long - exit_short) * lot_size
 
     return spread_value - net_debit 
 
