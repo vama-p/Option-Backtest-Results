@@ -1,21 +1,14 @@
 # -*- coding: utf-8 -*-
 """
-Created on Wed Feb 12 13:26:58 2025
-
-@author: fcamv
-"""
-
-# -*- coding: utf-8 -*-
-"""
 Created on Mon Nov  4 10:39:30 2024
 
-@author: fcamv
+@author: V***
 
 This strategy is an intraday strategy
-SCRIPT: BankNifty
-Entry: Strangle at 9:15
-Exit: Stop loss 15% of combined premium/ 15:15
-Time: Can test from 2019 onwards
+SCRIPT: Nifty
+Entry: Call Ratio Spread at 9:15
+Exit: 15:15 everyday
+Time: Past 3 years
 """
 
 from maticalgos.historical import historical
@@ -24,17 +17,14 @@ import pandas as pd
 import quantstats as qs
 import numpy as np
 
-email = 'vama.patel@finideas.com'
-password = 291410
+email = 'your email'
+password = your password
 ma = historical(email)
 ma.login(password)
 
 
 def cash_flow (entry_long, entry_short, exit_long, exit_short):
     
-    #Cash Flow = Spread_Value@close - Debit
-    
-    #Net Debit (Investment)
     net_credit = (entry_short - entry_long * 2 ) * lot_size
     
     spread_value = (exit_short - exit_long * 2 ) * lot_size
@@ -105,14 +95,7 @@ for i in dates[-756:]:
        
         if strangle : 
             for t in ['CE1', "CE2"] :
-                '''if (opdata["CE"].loc[currentcandle.name]['high'] + opdata["PE"].loc[currentcandle.name]['high']) >= td[t]['sl'] and td[t]['pos'] : 
-                    td[t]['buyprice'] = opdata[t].loc[currentcandle.name]['open']
-                    td[t]['buytime'] = currentcandle.name.time()
-                    td[t]['reason'] = "SL HIT"
-                    td[t]['pnl'] = (td[t]['sellprice'] - td[t]['buyprice'])*td[t]['qty']
-                    td[t]['pos'] = False   '''           
-                    
-                   
+                
                 if currentcandle.name.time() == datetime.time(15,00) and td[t]['pos']  : 
                     td[t]['exitprice'] = opdata[t].loc[currentcandle.name]['open']
                     td[t]['exittime'] =  f"{currentcandle.name.date()} {currentcandle.name.time()}"
@@ -152,6 +135,5 @@ kpis['entrytime'] = pd.to_datetime(kpis['entrytime'])
 backtest = kpis.set_index('entrytime')
 # Calculate percentage pnl relative to entry price for each trade
 backtest['returns'] = backtest['nlv'].pct_change().fillna(0)              
-
 # Try generating the report
 qs.reports.html(backtest['returns'], title='Intraday: Call Ratio Back Spread ', output='i_crbs.html')
