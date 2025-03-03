@@ -3,7 +3,7 @@
 """
 Created on Mon Nov  4 10:39:30 2024
 
-@author: fcamv
+@author: V***
 
 This strategy is an intraday strategy
 SCRIPT: Nifty
@@ -17,8 +17,8 @@ import datetime
 import pandas as pd
 import quantstats as qs
 
-email = 'vama.patel@finideas.com'
-password = 291410
+email = 'your email here'
+password = your password here
 ma = historical(email)
 ma.login(password)
 
